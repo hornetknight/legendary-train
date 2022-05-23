@@ -1,0 +1,204 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: rgb(102, 235, 235) ;
+            }
+
+            .UNbtn {
+                background-color: lightgray;
+            }
+
+            .header {
+                text-align: center;
+            }
+
+            div.UNbtn:hover {
+                border: 2px solid black;
+            }
+
+            body{
+                font-size: 20px;
+                font-family: sans-serif;
+                color: #333;
+            }
+            .question{
+                font-weight: 600;
+            }
+            .answers {
+                margin-bottom: 20px;
+            }
+            .answers label{
+                display: block;
+            }
+            #submit{
+                font-family: sans-serif;
+                font-size: 20px;
+                background-color: #279;
+                color: #fff;
+                border: 0px;
+                border-radius: 3px;
+                padding: 20px;
+                cursor: pointer;
+                margin-bottom: 20px;
+            }
+            #submit:hover{
+                background-color: #38a;
+            }
+
+        </style>
+
+    </head>
+    <body>
+        <div class="header">
+            <h1>UNSDG Goal 9 Quiz!</h1>
+            <h2>Please visit the UNSDG website before doing the quiz!</h2>
+            <div id="UNButton">
+                <button class="UNbtn" onclick="UNSite()">UN website found here</button>
+            </div>
+
+        
+            
+
+        </div>
+
+        <div id="quiz"></div>
+        <button id="submit">Get Results</button>
+        <div id="results"></div>
+
+        <script>
+
+
+        (function(){
+            function buildQuiz(){
+              // variable to store the HTML output
+              const output = [];
+    
+              // for each question...
+              myQuestions.forEach(
+                (currentQuestion, questionNumber) => {
+    
+                  // variable to store the list of possible answers
+                  const answers = [];
+    
+                  // and for each available answer...
+                  for(letter in currentQuestion.answers){
+    
+                    // ...add an HTML radio button
+                    answers.push(
+                      `<label>
+                        <input type="radio" name="question${questionNumber}" value="${letter}">
+                        ${letter} :
+                        ${currentQuestion.answers[letter]}
+                      </label>`
+                    );
+                  }
+    
+                  // add this question and its answers to the output
+                  output.push(
+                    `<div class="question"> ${currentQuestion.question} </div>
+                    <div class="answers"> ${answers.join('')} </div>`
+                  );
+                }
+              );
+    
+              // finally combine our output list into one string of HTML and put it on the page
+              quizContainer.innerHTML = output.join('');
+            }
+    
+            function showResults(){
+    
+              // gather answer containers from our quiz
+              const answerContainers = quizContainer.querySelectorAll('.answers');
+    
+              // keep track of user's answers
+              let numCorrect = 0;
+    
+              // for each question...
+              myQuestions.forEach( (currentQuestion, questionNumber) => {
+    
+                // find selected answer
+                const answerContainer = answerContainers[questionNumber];
+                const selector = `input[name=question${questionNumber}]:checked`;
+                const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+    
+                // if answer is correct
+                if(userAnswer === currentQuestion.correctAnswer){
+                  // add to the number of correct answers
+                  numCorrect++;
+    
+                  // color the answers green
+                  answerContainers[questionNumber].style.color = 'green';
+                }
+                // if answer is wrong or blank
+                else{
+                  // color the answers red
+                  answerContainers[questionNumber].style.color = 'red';
+                }
+              });
+    
+              // show number of correct answers out of total
+              resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
+            }
+    
+            const quizContainer = document.getElementById('quiz');
+            const resultsContainer = document.getElementById('results');
+            const submitButton = document.getElementById('submit');
+            const myQuestions = [
+              {
+                question: "How many air passengers were there in the year 2020?",
+                    answers: {
+                        a: '1.8 Billion',
+                        b: '1.5 Billion',
+                        c: '4.5 Billion'
+                    },
+                    correctAnswer: 'a'
+
+                },
+                {
+
+                    question: "Almost _____ million out of _____ rural dwellers lack good access to roads in 25 countries",
+                    answers: {
+                        a: '340, 620',
+                        b: '300, 520',
+                        c: '200, 610',
+                        d: '400, 500'                      
+
+                    },
+                    correctAnswer: 'b'
+                },
+                {
+                    question: "By what precent did manufacturing in developing countries grow in 2020?",
+                    answers: {
+                        a: '1.2%',
+                        b: '9.1%',
+                        c: '6.8%'
+                    },
+                    correctAnswer: 'a'
+
+                },
+                {
+                    question: "Which subgoal focuses on developing 'reliable, sustainable and resilient infrastructure', for human well-being",
+                    answers: {
+                        a: '9.2',
+                        b: '9.1',
+                        c: '9.0'
+                    },
+                    correctAnswer: 'b'
+
+                }
+            ];
+    
+            // Kick things off
+            buildQuiz();
+    
+            // Event listeners
+            submitButton.addEventListener('click', showResults);
+          })();
+    
+
+
+        </script>
+    </body>
+</html>
+                  
